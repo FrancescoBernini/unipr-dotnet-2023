@@ -11,6 +11,16 @@ public static class Program
         Example1();
         Example2();
         Example3();
+
+        //Esempio
+        using FileStream file = File.OpenRead("test.txt");
+        //metto a using per dire che la risorsa va gestita quando non più utilizzata
+        StreamReader reader = new(file);
+
+        string? firstLine = reader.ReadLine();
+
+        //Finchè non verrà gestito dal garbage collector lo stream rimarrà aperto.
+        //Possiamo vederlo come uno smart pointer che permette 
     }
 
     public static void Example1()
@@ -51,7 +61,7 @@ class MyDisposableClass : IDisposable
 // Questa è un'implementazione corretta di IDisposable:
 class BetterDisposable : IDisposable
 {
-    private bool _disposed;
+    private bool _disposed; //indica se è già stata chiamata dispose
 
     protected virtual void Dispose(bool disposing)
     {
@@ -69,7 +79,7 @@ class BetterDisposable : IDisposable
     }
 
     // // TODO: override finalizer only if 'Dispose(bool disposing)' has code to free unmanaged resources
-    // ~BetterDisposable()
+    // ~BetterDisposable() // usato quando bisogna gestire risorse provenienti da librerie esterne al C#
     // {
     //     // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
     //     Dispose(disposing: false);
@@ -79,6 +89,6 @@ class BetterDisposable : IDisposable
     {
         // Do not change this code. Put cleanup code in 'Dispose(bool disposing)' method
         Dispose(disposing: true);
-        GC.SuppressFinalize(this);
+        GC.SuppressFinalize(this); // e' gia' stata fatta la dispose quindi non serve il finalizer
     }
 }

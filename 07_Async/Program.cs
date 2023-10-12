@@ -34,17 +34,20 @@
 // Un metodo è considerato "asincrono" se usa la parola chiave async e/o se
 // restituisce un Task oppure un ValueTask.
 
+// i metodi async 
+
 void Example1()
 {
     // Questo non è un metodo asincrono.
 }
 
-async void Example1Async()
+async void Example1Async() // convenzione "Async" allaf ine del nome del metodo
 {
     // Questo è un metodo asincrono.
 
     // Nota: non è MAI considerato buona pratica fare un metodo asincrono con
-    // tipo di ritorno void. Questo metodo è solo di esempio.
+    // tipo di ritorno void. Questo metodo è solo di esempio. Dovra' restituire un tipo che implemnta
+    // l'interfaccia IAsyncResult
 }
 
 double Example2()
@@ -77,6 +80,9 @@ ValueTask<string> Example4Async()
     return ValueTask.FromResult("hello");
 }
 
+// valuetask e' una struct quindi va sullo stack ma cmq se si lavora in modo async verra' creato un Task
+// e quindi in genere si usa Task
+
 
 
 // I metodi asincroni possono essere chiamati all'interno di un contesto "async"
@@ -92,7 +98,10 @@ string DoSomething()
 
 async Task<string> DoSomethingAsync()
 {
-    double test1 = await Example2Async();
+    Task<double> test0 = Example2Async();
+    double test0r = await test0; // aspetto che finisca il task test0
+
+    double test1 = await Example2Async(); // chiama e aspetto ma e' come al solito
     int test2 = await Example3Async();
     string test3 = await Example4Async();
 
@@ -110,7 +119,7 @@ string GetPage(string url)
 
     // La riga seguente fa una chiamata HTTP; mentre attende risposta il thread
     // chiamante resta bloccato, occupando inutilmente risorse del sistema.
-    HttpResponseMessage response = client.Send(new(HttpMethod.Get, url));
+    HttpResponseMessage response = client.Send(new(HttpMethod.Get, url)); // inteerfaccia bloccata
 
     // Le righe seguenti leggono la risposta in modo sincrono.
     using Stream stream = response.Content.ReadAsStream();
@@ -123,7 +132,7 @@ string GetPage(string url)
 // Il cancellation token permette di annullare un'operazione asincrona
 // dall'esterno se il chiamante non è più interessato ad una risposta.
 // È buona pratica aggiungerne uno ai metodi asincroni.
-async Task<string> GetPageAsync(string url, CancellationToken cancellationToken = default)
+async Task<string> GetPageAsync(string url, CancellationToken cancellationToken = default) // buona pratica usare cancellation token che viene usato per interrompere il metodo se chi l'ha chiamato non interessa piu' la risposta
 {
     // Nota: la versione asincrona del codice seguente potrebbe essere scritta
     // in modo più semplice, ma ho cercato di tenerla il più simile possibile
@@ -136,13 +145,13 @@ async Task<string> GetPageAsync(string url, CancellationToken cancellationToken 
     HttpResponseMessage response = await client.SendAsync(new(HttpMethod.Get, url), cancellationToken);
 
     // Le righe seguenti leggono la risposta in modo asincrono.
-    await using Stream stream = await response.Content.ReadAsStreamAsync(cancellationToken);
-    using StreamReader reader = new(stream, leaveOpen: true);
+    await using Stream stream = await response.Content.ReadAsStreamAsync(cancellationToken); // await using vuole dire che si fare una disposeAsync
+    using StreamReader reader = new(stream, leaveOpen: true); // leaveOpen ci lascia aperto lo stream
     string content = await reader.ReadToEndAsync(cancellationToken);
 
     return content;
 }
-
+// se il processore ha 8 thread c# ne alloca 16
 
 
 // In un contesto sincrono potrebbe risultare difficile eseguire più operazioni
@@ -164,28 +173,22 @@ async Task<string> GetPagesParallelAsync(CancellationToken cancellationToken = d
     Task<string> homeTask = GetPageAsync("https://example.com", cancellationToken);
     Task<string> testTask = GetPageAsync("https://example.com/test", cancellationToken);
 
-    // Attende che entrambe le chiamate abbiano ricevuto una risposta.
+    Task.WaitAll(homeTask, testTask); // boh
+
+    // attende che entrambe le chiamate abbiano ricevuto una risposta
     await Task.WhenAll(homeTask, testTask);
 
     // Legge la risposta ad entrambe le chiamate.
-    string home = await homeTask;
+    string home = await homeTask; // senza la await non compila infatti e' come se assegnassimo della roba che non abbiamo ancora
     string test = await testTask;
 
     return $"{home}\n\n{test}";
 }
 
 
-
-// Supponendo di avere un metodo legacy scritto con codice sincrono che non può
-// essere convertito in codice asincrono...
-string SomeLegacyMethod()
-{
-    // codice...
-    return "test";
-}
-
-// ...è possibile eseguire codice sincrono in un contesto asincrono:
-async Task<string> SomeLegacyMethodAsync(CancellationToken cancellationToken = default)
+// NON E' BUONA PRATICA
+// È possibile eseguire codice sincrono in un contesto asincrono:
+Task<string> SomeLegacyMethodAsync(CancellationToken cancellationToken = default)
 {
     // Nota: non è MAI necessario e non è considerato buona pratica aggiungere
     // un metodo asincrono che fa il wrap della versione sincrona.
@@ -201,9 +204,15 @@ async Task<string> SomeLegacyMethodAsync(CancellationToken cancellationToken = d
     // sincrono, il massimo che può fare è non lanciare l'operazione se rileva
     // che la richiesta è già stata cancellata quando questo codice parte.
 
-    Task<string> task = Task.Run(SomeLegacyMethod, cancellationToken);
+    Task<string> task = Task.Run(SomeLegacyMethod, cancellationToken); // affido ad un thread che si blocchera del codice sincrono per non blocare il main thread
 
-    return await task;
+    return Task.Run(SomeLegacyMethod, cancellationToken);
+}
+
+string SomeLegacyMethod()
+{
+    // codice...
+    return "test";
 }
 
 
@@ -211,11 +220,8 @@ async Task<string> SomeLegacyMethodAsync(CancellationToken cancellationToken = d
 // È anche possibile eseguire codice asincrono in un contesto sincrono:
 string GetPagesSequential()
 {
-    // Avvia la chiamata al metodo asincrono.
-    Task<string> task = GetPagesParallelAsync();
-
-    // Attende in modo sincrono risposta (blocca il thread chiamante).
-    return task.GetAwaiter().GetResult();
+    Task<string> result = GetPagesParallelAsync();
+    return result.GetAwaiter().GetResult();
 }
 
 
@@ -224,6 +230,7 @@ string GetPagesSequential()
 // Task.Run(), Task.Wait() o Task.Result, e di non usare lock in codice
 // condiviso.
 // https://learn.microsoft.com/aspnet/core/fundamentals/best-practices#avoid-blocking-calls
+
 
 
 

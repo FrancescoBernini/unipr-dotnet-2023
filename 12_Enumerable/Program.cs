@@ -12,13 +12,13 @@
 IEnumerable<int> GetNumbers()
 {
     Console.WriteLine("Inside: 1");
-    yield return 1;
+    yield return 1; // la prossima volta che verra' chiamato GetNumers() si riprendera' da qua
     Console.WriteLine("Inside: 2");
     yield return 2;
     Console.WriteLine("Inside: 3");
     yield return 3;
     Console.WriteLine("Inside: End");
-    yield break;
+    yield break; // finisco la sequenza veramente
 }
 
 Console.WriteLine("Outside: Start");

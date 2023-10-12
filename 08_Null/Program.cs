@@ -53,7 +53,7 @@ if (isNull)
 {
     test = "not null";
 }
-
+// non si accorge che la stringa non e' null
 string example3 = Duplicate(test); // Warning: possible null reference argument for parameter 'str' in `string Duplicate(string str)`.
 
 // In questo caso è possibile zittire il warning:
