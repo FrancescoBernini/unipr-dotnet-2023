@@ -1,4 +1,20 @@
 ﻿
+MyRecord rec = new(123, "aaa");
+int t = rec.Test;
+string a = rec.Val;
+(int t2, string a2) = rec; // usa il decostruttore
+
+class Pippo
+{
+    private int _x;
+    private int _y;
+    public void Deconstruct(out int x, out int y)
+    {
+        x = _x;
+        y = _y;
+    }
+}
+
 // In C# è possibile definire classi con questa sintassi:
 class MyClass
 {
@@ -9,7 +25,7 @@ class MyClass
     private readonly int _readonlyField;
 
     // Questa è una property con getter e setter generati automaticamente.
-    public int AutoProperty { get; set; }
+    public int AutoProperty { get; set; } // sharplab.io (meglio ilspy) per vedere come viene espanso dal compilatore
 
     // Questa è una property con getter e setter indicati manualmente.
     public int Property
@@ -49,7 +65,7 @@ class MyClass
     // Questo è un metodo.
     public void PrintValue()
     {
-        Console.WriteLine($"Il valore della property è: {Property}");
+        Console.WriteLine($"Il valore della property è: {this.Property}"); //this e' superfluo
     }
 
     // È possibile definire un metodo "static" accessibile ovunque senza bisogno di creare istanze della classe.
@@ -158,7 +174,7 @@ public class Human : Animal, IAnimal, IJumping
 
 // Le "struct" sono equivalenti alle "class", ma non supportano ereditarietà; possono implementare interfacce.
 // A differenza delle classi, le strutture risiedono sullo stack piuttosto che sulla heap.
-
+// se dichiaro una struct come l'interfaccia che implemente essa viene copiata sull'heap
 public struct MyStruct : IJumping
 {
     public void Jump()
@@ -198,6 +214,7 @@ public struct MyEnum2
 
 // "record" è equivalente ad una "class" di sole property assegnate al costruttore.
 public record MyRecord(int Test, string Val);
+public record struct MyRecord3(int Test, string Val);
 
 // Equivalente approssimativamente a:
 public class MyRecord2

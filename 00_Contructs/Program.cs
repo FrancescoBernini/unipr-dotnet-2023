@@ -8,7 +8,7 @@ bool bool0;
 // Le variabili possono essere assegnate (o riassegnate) solo con valori del tipo usato in dichiarazione.
 num0 = 4567;
 dec0 = 45.67;
-str0 = "Ciao, mondo!";
+str0 = "Ciao, mondo!"; // si può fare 123.toString(); prima si doveva fare (123).toString();
 bool0 = false;
 
 // È possibile anche unire dichiarazione ed assegnazione iniziale in una singola riga di codice.
@@ -28,7 +28,7 @@ const int SomeConstant = 1234;
 const double AnotherConstant = 12.34;
 const string MyString = "test";
 
-
+// 0 e' false e 1 e' vero 2,3,4... non sono validi
 
 // In C# esistono "value type" e "reference type".
 
@@ -53,6 +53,8 @@ const string MyString = "test";
 // string   stringhe immutabili di char
 // object   oggetto che accetta qualsiasi valore
 // dynamic  oggetto che accetta qualsiasi valore bypassando i controlli in fase di compilazione
+// dynamic e' pericoloso e se lo usiamo potrebbe crashare a runtime se facciamo un addizione con un oggetto che non ha il +
+
 
 // I "value type" risiedono sullo stack, mentre i "reference type" sulla heap.
 
@@ -137,7 +139,7 @@ switch (MyString)
         Console.WriteLine("La stringa è 'prova'.");
         break;
 
-    case { Length: > 10 }:
+    case { Length: > 10 }: // c'e' solo in c# (Pattern matching)
         Console.WriteLine("La stringa ha una lunghezza maggiore di 10.");
         break;
 
@@ -153,7 +155,7 @@ string message = MyString switch
     "prova" => "La stringa è 'prova'.",
     { Length: > 10 } => "La stringa ha una lunghezza maggiore di 10.",
     _ => "La stringa non è né 'test' né 'prova', e la lunghezza è minore o uguale a 10."
-};
+}; // _ si puo' usare come il cast a void di c++ per buttare il risulatao della funzione
 
 Console.WriteLine(message);
 
