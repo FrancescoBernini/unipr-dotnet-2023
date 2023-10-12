@@ -21,6 +21,10 @@ Example example1 = new()
 };
 
 string json1 = JsonSerializer.Serialize(example1);
+string jsonOptions = JsonSerializer.Serialize(example1, new JsonSerializerOptions()
+{
+    WriteIndented = true // con questo verra' identato
+});
 
 // Output:
 // {"Hello":"bonjour","World":42}
@@ -30,14 +34,14 @@ Console.WriteLine(json1);
 
 // La classe JsonSerializer permette anche di deserializzre dal JSON.
 
-string json2 = """{ "Hello": "hola", "World": 123 }""";
+string json2 = """{ "Hello": "hola", "World": 123 }"""; // piu' comodo di mettere \ ogni volta prima di "
 
 Example? example2 = JsonSerializer.Deserialize<Example>(json2);
 
 // Output:
 // Hello: hola
 // World: 123
-Console.WriteLine($"Hello: {example2?.Hello}");
+Console.WriteLine($"Hello: {example2?.Hello}"); // se e' null non leggere .hello
 Console.WriteLine($"World: {example2?.World}");
 
 // Il valore restituito è nullabile in quanto il JSON potrebbe essere "null".
@@ -47,7 +51,8 @@ Example? example3 = JsonSerializer.Deserialize<Example>("null");
 // Valore null? True
 Console.WriteLine($"Valore null? {example3 == null}");
 
-
+// in questo modo in ram potrebbe finire un json enorme e non va bene piu' questo modo
+// c'e' una classe migliore che vediamo poi che si chiama UTF8-json qualcosa
 
 class Example
 {

@@ -34,7 +34,7 @@ class ProcessDataFile : BackgroundService
     {
         try
         {
-            // I messaggi informativi indicano cosa succede nel software.
+            // I messaggi informativi indicano cosa succede nel software. (rimangono nell'exe "Release")
             _logger.LogInformation("Inizio elaborazione file...");
 
             if (!Environment.Is64BitProcess)
@@ -55,7 +55,7 @@ class ProcessDataFile : BackgroundService
             _logger.LogDebug("Inizio ciclo sul file dei dati...");
 
             int rowNumber = 0;
-            foreach (string row in File.ReadLines("data.txt"))
+            await foreach (string row in File.ReadLinesAsync("data.txt"))
             {
                 await ProcessRow(++rowNumber, row, stoppingToken);
             }
@@ -84,7 +84,7 @@ class ProcessDataFile : BackgroundService
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        _logger.LogDebug("Elaborazione riga {RowNumber}: {Value}", rowNumber, row);
+        _logger.LogDebug("Elaborazione riga {RowNumber}: {Value}", rowNumber, row); // meglio usare questa scrittura della stringa senza $ perche' per un DB furbo sarebbe meglio vedere stringhe fisse cosi' da poter sostituire {rownumber} con la cosa giusta
 
         if (string.IsNullOrWhiteSpace(row))
         {

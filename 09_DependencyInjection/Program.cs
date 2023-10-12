@@ -36,6 +36,11 @@ builder.Services.TryAddSingleton<IDataAccessor, FileDataAccessor>();
 builder.Services.TryAddSingleton<IServerUploader, HttpServerUploader>();
 builder.Services.TryAddSingleton<IDataUploader, DataUploader>();
 
+// agggiunta del prof
+builder.Services.TryAddTransient<IDataUploader, DataUploader>();
+builder.Services.TryAddScoped<IDataUploader, DataUploader>();
+
+
 // Il codice dell'applicazione risiede negli "hosted service",
 // è anche consentito registrare più di un "hosted service":
 builder.Services.AddHostedService<MainService>();

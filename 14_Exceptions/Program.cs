@@ -54,7 +54,7 @@ try
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"Exception: {ex.Message}");
+    Console.WriteLine($"Exception: {ex.Message}"); // con un braek point si vede la staktrace e qunidi chi ha chiamato il metodo
 }
 
 // Output:
@@ -90,7 +90,7 @@ catch (Exception)
 {
     Console.WriteLine("Catch 1");
 }
-finally
+finally // c'e' una differenza tra il mettere e non mettere il finally (la vedremo piu' avanti)
 {
     Console.WriteLine("Finally 1");
 }
@@ -157,7 +157,7 @@ string GetConfig()
 {
     if (!File.Exists("config.txt"))
         throw new Exception("Configuration file not found.");
-        
+
     return File.ReadAllText("config.txt");
 }
 
@@ -174,7 +174,7 @@ string GetConfigBad()
     }
     catch (Exception ex) // bad
     {
-        throw new Exception("Configuration file not found.", ex);
+        throw new Exception("Configuration file not found.", ex); // in questo modo buttiamo via le info costruite
     }
 }
 
