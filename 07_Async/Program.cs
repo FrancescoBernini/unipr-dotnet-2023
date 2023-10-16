@@ -36,6 +36,17 @@
 
 // i metodi async 
 
+// mio esempio
+async Task<int> SumAsync(int a, int b)
+{
+    await Task.Delay(5000); // come la slepp ma asyncrona
+    return a + b;
+}
+
+Task<int> sum = SumAsync(1, 1);
+Console.WriteLine("ciao");
+Console.WriteLine(sum); // senza await scrive qualcosa che non ha ancora.
+
 void Example1()
 {
     // Questo non è un metodo asincrono.
