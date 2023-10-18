@@ -156,7 +156,10 @@ async Task<string> GetPageAsync(string url, CancellationToken cancellationToken 
     HttpResponseMessage response = await client.SendAsync(new(HttpMethod.Get, url), cancellationToken);
 
     // Le righe seguenti leggono la risposta in modo asincrono.
-    await using Stream stream = await response.Content.ReadAsStreamAsync(cancellationToken); // await using vuole dire che si fare una disposeAsync
+    await using Stream stream = await response.Content.ReadAsStreamAsync(cancellationToken); 
+    // L'await prima della using viene messo perche' Stream implementa l'interfaccia IDisposableAsync
+    // e quindi non vogliamo bloccare il thread mentre fa la dispose async
+
     using StreamReader reader = new(stream, leaveOpen: true); // leaveOpen ci lascia aperto lo stream
     string content = await reader.ReadToEndAsync(cancellationToken);
 

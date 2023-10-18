@@ -50,7 +50,7 @@ PrintDefinitionOf(myClassType);
 // È possibile fare uso di reflection anche per leggere i valori a runtime,
 // bypassando eventuali controlli sui modificatori di accessibilità.
 
-void PrintValuesOf(object obj)
+void PrintValuesOf(object obj) // possiamo leggere anche le cose private
 {
     Type type = obj.GetType();
 

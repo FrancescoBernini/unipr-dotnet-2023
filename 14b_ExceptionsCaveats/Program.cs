@@ -33,6 +33,7 @@ static class Program
         Console.WriteLine();
         Console.WriteLine("ESEMPIO 2:");
 
+        // MOLTO IMPORTANTE FARE LA THROW PERCHE' ALTRIMENTI SI TAGLIA IL TRACEING
         // Le eccezioni senza un "throw" non hanno stack trace.
         Exception test = ThisMethodReturnsAnException();
 
@@ -136,6 +137,7 @@ static class Program
             // valorizzato lo stack trace, lo stack trace del primo "throw"
             // viene perso e rimpiazzato con lo stack trace dell'ultimo.
 
+            // MAI FARLO
             throw ex; // Warning: Re-throwing caught exception changes stack information.
         }
     }
