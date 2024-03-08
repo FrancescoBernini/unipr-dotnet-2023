@@ -155,7 +155,7 @@ string message = MyString switch
     "prova" => "La stringa è 'prova'.",
     { Length: > 10 } => "La stringa ha una lunghezza maggiore di 10.",
     _ => "La stringa non è né 'test' né 'prova', e la lunghezza è minore o uguale a 10."
-}; // _ si puo' usare come il cast a void di c++ per buttare il risulatao della funzione
+}; // _ si puo' usare come il cast a void di c++ per buttare il risultato della funzione
 
 Console.WriteLine(message);
 

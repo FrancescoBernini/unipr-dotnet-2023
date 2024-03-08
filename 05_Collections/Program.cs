@@ -25,7 +25,7 @@ int l = arrayNumeri.Length;
 // List: (ArrayList in realta')
 // - accesso per indice O(1)
 // - ricerca O(n) 
-// - aggiunta O(n) se COunt e' uguale a Capacity altrimenti O(1)
+// - aggiunta O(n) se Count e' uguale a Capacity altrimenti O(1)
 // - cancellazione O(n)
 // - inserimento O(n) vanno spostati tutti quelli dopo
 List<int> listNumeri = new() { 1, 2, 3 };
@@ -41,6 +41,7 @@ listNumeri.Add(4);
 
 // rimuove il secondo
 listNumeri.RemoveAt(1);
+
 
 
 
@@ -98,7 +99,7 @@ Dictionary<string, int> dicNumeri = new()
 // legge il valore associato alla chiave "Tre"
 int tre = dicNumeri["Tre"];
 
-// legge il valore associato alla chiave "Dieci"
+// aggiunge un'associazione chiave valore
 dicNumeri["Dieci"] = 10;
 
 // rimuove la chiave "Due" ed il valore associato
@@ -112,7 +113,7 @@ dicNumeri.Add("Due", 20); // da' eccezione se c'e' gia'
 // Inoltre è prevista un'astrazione IEnumerable che rappresenta una serie di valori
 // non modificabile. Tutte le "collection" sono anche IEnumerable, ma l'efficienza
 // di ciascuna operazione su un IEnumerable dipende dalla "collection" sottostante.
-IEnumerable<int> seqNumeri = new[] { 1, 2, 3 };
+IEnumerable<int> seqNumeri = new[] { 1, 2, 3 }; // Tipo concreto = int[]
 
 // legge il primo valore
 int primoNumeroSeq = seqNumeri.ElementAt(0);
@@ -124,8 +125,9 @@ bool seqContiene3 = seqNumeri.Contains(3);
 
 // È possibile iterare tutti i valori IEnumerable, ovvero i valori delle "collection",
 // utilizzando il ciclo foreach di C#.
-foreach (int numero in listNumeri) // ogni giro controlla se c'e' un next e se c'e' setta il next cmoe current
-{
+
+// ogni giro controlla se c'e' un next e se c'e' setta il next come current
+foreach (int numero in listNumeri) {
     Console.WriteLine(numero);
 }
 

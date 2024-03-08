@@ -37,7 +37,7 @@ IEnumerable<int> ordered2 = numeri.OrderBy(x => -x); //Ordina per i suoi negativ
 // Ordina in ordine decrescente.
 // Risultato: 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
 IEnumerable<int> orderedDescending = numeri.OrderDescending();
-IEnumerable<int> orderedByDes = numeri.OrderByDescending(x => -x); //Ordina decrescentenmente per i suoi negativi
+IEnumerable<int> orderedByDes = numeri.OrderByDescending(x => -x); //Ordina decrescentemente per i suoi negativi
 
 // Filtra solo i numeri maggiori di 5.
 // Risultato: 6, 8, 7, 9
@@ -47,7 +47,7 @@ IEnumerable<int> aboveFive = numeri.Where(n => n > 5); // filtro
 // Risultato: 6
 int first = numeri.First();
 int first2 = numeri.FirstOrDefault(); //Restituisce il primo elemento se c'è, altrimenti il default per quel tipo (Ex. per int è 0)
-int first3 = numeri.FirstOrDefault(10); // Restituisce il prmo o se e' vuota 10
+int first3 = numeri.FirstOrDefault(10); // Restituisce il primo o se e' vuota 10
 
 // Prende i primi 5 valori nella sequenza.
 // Risultato: 6, 8, 5, 1, 2
@@ -56,7 +56,7 @@ IEnumerable<int> firstFive = numeri.Take(5);
 // Prende i numeri dal 7 in poi nella sequenza.
 // Risultato: 7, 9, 4, 0, 3
 IEnumerable<int> sevenAndAfter = numeri.SkipWhile(n => n != 7); // poco usato
-IEnumerable<int> sevenAndAfter1 = numeri.SkipWhile(n => n != 7).Skip(1); // skippa fino al a quello dopo il 7
+IEnumerable<int> sevenAndAfter1 = numeri.SkipWhile(n => n != 7).Skip(1); // skippa fino a quello dopo il 7
 
 
 // In quanto fluent-api, è possibile concatenare queste operazioni elementari per

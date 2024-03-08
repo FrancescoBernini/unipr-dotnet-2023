@@ -39,7 +39,7 @@
 // mio esempio
 async Task<int> SumAsync(int a, int b)
 {
-    await Task.Delay(5000); // come la slepp ma asyncrona
+    await Task.Delay(5000); // come la sleep ma asyncrona
     return a + b;
 }
 
@@ -52,7 +52,7 @@ void Example1()
     // Questo non è un metodo asincrono.
 }
 
-async void Example1Async() // convenzione "Async" allaf ine del nome del metodo
+async void Example1Async() // convenzione "Async" alla fine del nome del metodo
 {
     // Questo è un metodo asincrono.
 
@@ -91,8 +91,8 @@ ValueTask<string> Example4Async()
     return ValueTask.FromResult("hello");
 }
 
-// valuetask e' una struct quindi va sullo stack ma cmq se si lavora in modo async verra' creato un Task
-// e quindi in genere si usa Task
+// valuetask e' una struct quindi va sullo stack ma cmq se si lavora
+// in modo async verra' creato un Task e quindi in genere si usa Task
 
 
 
@@ -130,7 +130,7 @@ string GetPage(string url)
 
     // La riga seguente fa una chiamata HTTP; mentre attende risposta il thread
     // chiamante resta bloccato, occupando inutilmente risorse del sistema.
-    HttpResponseMessage response = client.Send(new(HttpMethod.Get, url)); // inteerfaccia bloccata
+    HttpResponseMessage response = client.Send(new(HttpMethod.Get, url)); // interfaccia bloccata
 
     // Le righe seguenti leggono la risposta in modo sincrono.
     using Stream stream = response.Content.ReadAsStream();
@@ -143,7 +143,7 @@ string GetPage(string url)
 // Il cancellation token permette di annullare un'operazione asincrona
 // dall'esterno se il chiamante non è più interessato ad una risposta.
 // È buona pratica aggiungerne uno ai metodi asincroni.
-async Task<string> GetPageAsync(string url, CancellationToken cancellationToken = default) // buona pratica usare cancellation token che viene usato per interrompere il metodo se chi l'ha chiamato non interessa piu' la risposta
+async Task<string> GetPageAsync(string url, CancellationToken cancellationToken = default)
 {
     // Nota: la versione asincrona del codice seguente potrebbe essere scritta
     // in modo più semplice, ma ho cercato di tenerla il più simile possibile
@@ -158,7 +158,7 @@ async Task<string> GetPageAsync(string url, CancellationToken cancellationToken 
     // Le righe seguenti leggono la risposta in modo asincrono.
     await using Stream stream = await response.Content.ReadAsStreamAsync(cancellationToken); 
     // L'await prima della using viene messo perche' Stream implementa l'interfaccia IDisposableAsync
-    // e quindi non vogliamo bloccare il thread mentre fa la dispose async
+    // e quindi non vogliamo bloccare il thread mentre fa la DisposeAsync
 
     using StreamReader reader = new(stream, leaveOpen: true); // leaveOpen ci lascia aperto lo stream
     string content = await reader.ReadToEndAsync(cancellationToken);
@@ -187,9 +187,10 @@ async Task<string> GetPagesParallelAsync(CancellationToken cancellationToken = d
     Task<string> homeTask = GetPageAsync("https://example.com", cancellationToken);
     Task<string> testTask = GetPageAsync("https://example.com/test", cancellationToken);
 
-    Task.WaitAll(homeTask, testTask); // boh
+    // attende che entrambe le chiamate abbiano ricevuto una risposta in maniera sincrona
+    // Task.WaitAll(homeTask, testTask); 
 
-    // attende che entrambe le chiamate abbiano ricevuto una risposta
+    // attende che entrambe le chiamate abbiano ricevuto una risposta in maniera asyncrona
     await Task.WhenAll(homeTask, testTask);
 
     // Legge la risposta ad entrambe le chiamate.
@@ -218,7 +219,7 @@ Task<string> SomeLegacyMethodAsync(CancellationToken cancellationToken = default
     // sincrono, il massimo che può fare è non lanciare l'operazione se rileva
     // che la richiesta è già stata cancellata quando questo codice parte.
 
-    Task<string> task = Task.Run(SomeLegacyMethod, cancellationToken); // affido ad un thread che si blocchera del codice sincrono per non blocare il main thread
+    Task<string> task = Task.Run(SomeLegacyMethod, cancellationToken); // affido ad un thread che si blocchera' del codice sincrono per non bloccare il main thread
 
     return Task.Run(SomeLegacyMethod, cancellationToken);
 }
