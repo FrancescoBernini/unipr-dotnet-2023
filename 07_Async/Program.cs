@@ -93,6 +93,13 @@ ValueTask<string> Example4Async()
 
 // valuetask e' una struct quindi va sullo stack ma cmq se si lavora
 // in modo async verra' creato un Task e quindi in genere si usa Task
+// viene usato quando l'operazione potrebbe essere sia in modo sincrono
+// che in modo asincrono. viene usato anche quando le operazioni vengono
+// chiamate molto frequentemente. ATTENZIONE: A differenza di Task, che
+// può essere atteso più volte, un ValueTask è pensato per essere atteso
+// una sola volta. Se hai bisogno di attendere lo stesso risultato più
+// volte, potresti dover convertire il ValueTask in un Task con .AsTask()
+// o gestire diversamente la logica.
 
 
 

@@ -36,7 +36,7 @@ builder.Services.TryAddSingleton<IDataAccessor, FileDataAccessor>();
 builder.Services.TryAddSingleton<IServerUploader, HttpServerUploader>();
 builder.Services.TryAddSingleton<IDataUploader, DataUploader>();
 
-// agggiunta del prof
+// aggiunta del prof
 builder.Services.TryAddTransient<IDataUploader, DataUploader>();
 builder.Services.TryAddScoped<IDataUploader, DataUploader>();
 
