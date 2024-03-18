@@ -7,7 +7,7 @@ using Microsoft.Extensions.Logging;
 // di componenti esterni, o per nuove pattern di utilizzo diverse da quelle
 // ipotizzate in fase di analisi del software.
 //
-// Per agevolare l'identificazione di nuovo problematiche, che talvolta
+// Per agevolare l'identificazione di nuove problematiche, che talvolta
 // emergono anche anni dopo un rilascio in produzione, è importante che
 // il software emetta log che descrivano gli eventi interni.
 
@@ -84,11 +84,11 @@ class ProcessDataFile : BackgroundService
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        _logger.LogDebug("Elaborazione riga {RowNumber}: {Value}", rowNumber, row); // meglio usare questa scrittura della stringa senza $ perche' per un DB furbo sarebbe meglio vedere stringhe fisse cosi' da poter sostituire {rownumber} con la cosa giusta
-
+        _logger.LogDebug("Elaborazione riga {RowNumber}: {Value}", rowNumber, row); // meglio usare questa scrittura della stringa senza $ perche' per un DB furbo sarebbe meglio vedere stringhe fisse cosi' da poter sostituire {RowNumber} con la cosa giusta
+        
         if (string.IsNullOrWhiteSpace(row))
         {
-            // I messaggi di errore indicano non è stato possibile
+            // I messaggi di errore indicano che non è stato possibile
             // completare correttamente l'operazione richiesta.
             //
             // Sarà necessario correggere manualmente il problema,

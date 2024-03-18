@@ -54,7 +54,7 @@ try
 }
 catch (Exception ex)
 {
-    Console.WriteLine($"Exception: {ex.Message}"); // con un braek point si vede la staktrace e qunidi chi ha chiamato il metodo
+    Console.WriteLine($"Exception: {ex.Message}"); // con un break point si vede la staktrace e quindi chi ha chiamato il metodo
 }
 
 // Output:
@@ -63,7 +63,7 @@ catch (Exception ex)
 
 
 // È possibile filtrare solo alcuni tipi di eccezione indicando nel blocco
-// "catch" il tipo di eccezione che si intente intercettare, oppure
+// "catch" il tipo di eccezione che si intende intercettare, oppure
 // utilizzando la parola chiave "when" per definire una condizione.
 try
 {
@@ -80,7 +80,11 @@ catch (Exception ex) when (ex.Message.StartsWith("This"))
 
 
 // Se è presente un blocco "finally", viene eseguito dopo il "try" e dopo il
-// "catch", prima di procedere con l'esecuzione.
+// "catch", prima di procedere con l'esecuzione. In questo modo, si è sicuri
+// che il codice presente in esso (tipicamente di pulizia delle risorse)
+// venga eseguito anche in caso di generazione di una eccezione non catturata.
+// Inoltre, è comodo per riunire in un unico posto il codice di pulizia che 
+// altrimenti andrebbe scritto in ogni blocco catch con probabili ripetizioni.
 
 try
 {
