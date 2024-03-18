@@ -124,11 +124,17 @@ async Task WriteToFileExampleAsync(CancellationToken cancellationToken = default
         // Scrive una riga di testo sul file.
         await writer.WriteLineAsync("Hello, World!");
 
+        // Forza un flush del buffer dello StreamWriter.
         await writer.FlushAsync();
     }
 
-    // Forza un flush del buffer di scrittura.
+    // Forza un flush del buffer di scrittura del file.
     await file.FlushAsync(cancellationToken);
+
+    // Questo doppio flush assicura che i dati vengano effettivamente scritti sul file
+    // forzando lo svuotamento dei 2 livelli di bufferizzazione. Esiste un parametro
+    // "AutoFlush" ma è a false di default per una questione di prestazioni: la scrittura
+    // I/O bound è lenta e fare flush per ogni operazione sarebbe troppo dispendioso.
 
     // Riporta lo stream al primo byte del file.
     file.Position = 0;

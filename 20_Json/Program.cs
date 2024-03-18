@@ -51,11 +51,9 @@ Example? example3 = JsonSerializer.Deserialize<Example>("null");
 // Valore null? True
 Console.WriteLine($"Valore null? {example3 == null}");
 
-// in questo modo in ram potrebbe finire un json enorme e non va bene piu' questo modo
-// c'e' una classe migliore che vediamo poi che si chiama UTF8-json qualcosa
 
 // Utilizzando il JsonSerializer per serializzare o deserializzare JSON,
-// l'intero valore coinvolto deve essere caricato in memoria.
+// l'intero valore coinvolto deve essere caricato in memoria RAM.
 // Capita di dover lavorare su file JSON di grandi dimensioni, per esempio
 // è frequente leggere array JSON con decine, centinaia o migliaia di valori.
 //
@@ -80,7 +78,8 @@ using Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(json4));
 MyJsonStreamTokenEnumerator jsonTokens = new(stream) { DebugPrintToConsole = false };
 foreach (Utf8JsonReader token in jsonTokens)
 {
-    string tokenValue = token.HasValueSequence ? Encoding.UTF8.GetString(token.ValueSequence) : Encoding.UTF8.GetString(token.ValueSpan);
+    string tokenValue = token.HasValueSequence ? Encoding.UTF8.GetString(token.ValueSequence) :
+                                                 Encoding.UTF8.GetString(token.ValueSpan);
     Console.WriteLine($"Token: '{tokenValue}' ({token.TokenType})");
 }
 

@@ -145,14 +145,16 @@ Console.WriteLine($"Multi-task: {sharedCounter3}");
 // Output:
 // Multi-task: 42342
 
-// USARE I THREAD SOLO QUANDO SERVONO PRESTAZIONI ALTE PER PROCESSARE AD ESMPIO TANTI DATI
+// USARE I THREAD SOLO QUANDO SERVONO PRESTAZIONI ALTE PER PROCESSARE AD ESEMPIO TANTI DATI
 
 // In un contesto "async" come quello dei task, usare un lock è sconsigliato:
 // https://learn.microsoft.com/aspnet/core/fundamentals/best-practices#avoid-blocking-calls
 //
-// È possibile risolvere questo problema con un semaforo.
+// È possibile risolvere questo problema con un semaforo. In particolare vengono consigliati
+// i SemaphoreSlim per i task perchè i Semaphore hanno delle Wait bloccanti che non vanno
+// d'accordo con la gestione delle attese con async/await. (Semaphore è per i thread).
 
-SemaphoreSlim semaphore = new(1); // Usare slim perche' quello normale e' per i thread
+SemaphoreSlim semaphore = new(1);
 int sharedCounter4 = 0;
 
 List<Task> tasks2 = new();
@@ -163,7 +165,7 @@ for (int i = 0; i < 100; i++)
     {
         for (int i = 0; i < 1000; i++)
         {
-            await semaphore.WaitAsync(); // MOLTO PIU LENTO DI lock(obj) CON I TASK USARE GLI SLIMSEMAPHORE PERCHE' NON VA BENE BLOCCARE UN TASK PERCHE' AWAIT LO LIBERA NON LO BLOCCA
+            await semaphore.WaitAsync(); // MOLTO PIU LENTO DI lock(obj).
             try
             {
                 sharedCounter4++;
